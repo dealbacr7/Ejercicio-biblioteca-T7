@@ -1,13 +1,13 @@
 Reparto de roles
 
-👤 Persona 1: Arquitecto/a e infraestructura (Singleton)
+👤 Persona 1: Arquitecto/a e infraestructura (Singleton)  JAVI
 
 Configuracion (Singleton): máximo de préstamos por usuario, días de préstamo, número de copias online (5)…
 GestorBD (Singleton): registro central de préstamos y reservas. Debe ser thread-safe, con un threading.Lock en __new__ (doble comprobación) y otro lock en cada operación de lectura o escritura.
 Define al principio los contratos comunes: las clases abstractas y las firmas de los métodos (ver más abajo).
 Hace el esquema de arquitectura e integra el main final.
 
-👤 Persona 2: Catálogo de ítems (Factory Method)
+👤 Persona 2: Catálogo de ítems (Factory Method)  SERGIO
 
 Clase abstracta ItemPrestamo y sus productos concretos:
 LibroFisico y Revista: se pueden prestar.
@@ -15,14 +15,14 @@ MaterialConsulta: se consulta bajo petición y no puede salir de la biblioteca. 
 LibroOnline: tiene un máximo de 5 accesos simultáneos, controlados con threading.Semaphore(5) o un contador protegido con lock.
 Creadores: la clase abstracta CreadorItem con crear_item(), y sus subclases CreadorLibroFisico, CreadorRevista, CreadorConsulta y CreadorOnline.
 
-👤 Persona 3: Lógica del préstamo (State + Command)
+👤 Persona 3: Lógica del préstamo (State + Command)  RAFA
 
 State: EstadoPrestamo (abstracta) con prestar(), devolver() y reservar(). Sus estados concretos son Disponible, Prestado y Reservado, y cada uno define qué transiciones permite y cuáles dan error.
 Command: la interfaz Comando con ejecutar() y deshacer(). Los comandos concretos son PrestarCommand, DevolverCommand y ReservarCommand.
 Invocador TerminalBiblioteca, que ejecuta los comandos y guarda un historial para poder deshacer.
 Cada comando llama al ítem, y el ítem delega la acción en su estado actual.
 
-👤 Persona 4: Notificaciones, concurrencia y UML (Observer + hilos)
+👤 Persona 4: Notificaciones, concurrencia y UML (Observer + hilos)  CARLOS
 
 Observer: el ítem es el sujeto (suscribir, desuscribir, notificar) y Usuario es el observador (update). Cuando el ítem vuelve a Disponible, se avisa a quienes estaban esperando.
 Simulación multihilo: varios usuarios intentan coger el mismo libro a la vez, usando threading.Thread o ThreadPoolExecutor. La prueba debe comprobar que solo uno lo consigue con un libro físico, y que como máximo 5 lo consiguen con un libro online.
